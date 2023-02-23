@@ -1,0 +1,8 @@
+---
+- name: Provision Site
+  hosts: registry
+  remote_user: root
+  roles:
+    - docker
+    - certbot
+    - registry

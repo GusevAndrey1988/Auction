@@ -1,0 +1,3 @@
+certbot_email: gusevandrey1988@gmail.com
+certbot_hosts:
+  - registry.gusevandrey.ru

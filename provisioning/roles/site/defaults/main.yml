@@ -1,0 +1,4 @@
+certbot_email: gusevandrey1988@gmail.com
+certbot_hosts:
+  - demo-auction.gusevandrey.ru
+  - api.demo-auction.gusevandrey.ru
