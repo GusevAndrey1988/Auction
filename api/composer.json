@@ -1,0 +1,22 @@
+{
+    "name": "gusevandrey/demo-auction",
+    "type": "project",
+    "authors": [
+        {
+            "name": "Gusev Andrey",
+            "email": "gusevandrey1988@gmail.com"
+        }
+    ],
+    "config": {
+        "process-timeout": 0,
+        "sort-packages": true
+    },
+    "require": {
+        "php": "^8.2",
+        "slim/psr7": "^1.6",
+        "slim/slim": "^4.11"
+    },
+    "require-dev": {
+        "roave/security-advisories": "dev-latest"
+    }
+}
