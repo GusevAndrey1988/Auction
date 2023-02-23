@@ -25,7 +25,11 @@ services:
 
   api-php-fpm:
     image: ${REGISTRY}/auction-api-php-fpm:${IMAGE_TAG}
+    environment:
+      - APP_DEBUG=0
     restart: always
 
   api-php-cli:
     image: ${REGISTRY}/auction-api-php-cli:${IMAGE_TAG}
+    environment:
+      - APP_DEBUG=0
