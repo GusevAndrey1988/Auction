@@ -2,38 +2,16 @@
 
 declare(strict_types = 1);
 
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
-use Slim\Factory\AppFactory;
+use Psr\Container\ContainerInterface;
+use Slim\App;
 
 http_response_code(500);
 
 require_once __DIR__.'/../vendor/autoload.php';
 
-$builder = new \DI\ContainerBuilder();
+/** @var ContainerInterface $container */
+$container = require __DIR__.'/../config/container.php';
 
-$builder->addDefinitions([
-    'config' => [
-        'debug' => (bool)getenv('APP_DEBUG'),
-    ]
-]);
-
-$container = $builder->build();
-
-$app = AppFactory::createFromContainer($container);
-
-$app->addErrorMiddleware($container->get('config')['debug'], true, true);
-
-$app->get(
-    '/',
-    function (
-        ServerRequestInterface $request,
-        ResponseInterface $response,
-        mixed $args
-    ): ResponseInterface {
-        $response->getBody()->write('{}');
-        return $response->withHeader('Content-type', 'application/json');
-    }
-);
-
+/** @var App $app */
+$app = (require __DIR__.'/../config/app.php')($container);
 $app->run();
