@@ -2,9 +2,15 @@
 
 declare(strict_types=1);
 
-use DI\Container;
+use Psr\Container\ContainerInterface;
 use Slim\App;
 
-return static function (App $app, Container $container): void {
-    $app->addErrorMiddleware($container->get('config')['debug'], true, true);
+return static function (App $app, ContainerInterface $container): void {
+    /**
+     * @var array
+     * @psalm-var array{debug:bool}
+     */
+    $config = $container->get('config');
+
+    $app->addErrorMiddleware($config['debug'], true, true);
 };
