@@ -33,7 +33,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Test:\\": "tests/"
+            "Test\\": "tests/"
         }
     },
     "scripts": {
@@ -41,8 +41,8 @@
         "cs-check": "phpcs",
         "cs-fix": "phpcbf",
         "psalm": "psalm",
-        "psalm-si": "psalm --show-info=true",
         "test": "phpunit --color=always",
+        "test-unit-coverage": "phpunit --color=always --coverage-html var/coverage",
         "app": "php bin/app.php --ansi"
     }
 }

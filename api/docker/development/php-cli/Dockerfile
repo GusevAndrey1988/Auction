@@ -1,10 +1,14 @@
-FROM php:8.2-cli-alpine
+FROM php:8.2-cli
+
+RUN pecl install xdebug\
+    && docker-php-ext-enable xdebug
 
 RUN mv $PHP_INI_DIR/php.ini-development $PHP_INI_DIR/php.ini
 
 COPY ./common/php/conf.d /usr/local/etc/php/conf.d
 COPY ./development/php/conf.d /usr/local/etc/php/conf.d
 
+ENV XDEBUG_MODE=coverage
 ENV COMPOSER_ALLOW_SUPERUSER 1
 
 RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"\
