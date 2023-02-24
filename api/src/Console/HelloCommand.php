@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace App\Console;
 
@@ -21,6 +21,6 @@ class HelloCommand extends Command
     {
         $output->writeln('<info>Hello!</info>');
 
-        return Command::SUCCESS; 
+        return Command::SUCCESS;
     }
 }
