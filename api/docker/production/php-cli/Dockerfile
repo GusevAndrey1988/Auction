@@ -1,10 +1,6 @@
-FROM php:8.2-cli-alpine
+FROM php:8.2-cli-alpine AS composer
 
 RUN apk add unzip
-
-RUN mv $PHP_INI_DIR/php.ini-production $PHP_INI_DIR/php.ini
-
-COPY ./docker/common/php/conf.d /usr/local/etc/php/conf.d
 
 ENV COMPOSER_ALLOW_SUPERUSER 1
 
@@ -20,4 +16,18 @@ COPY ./composer.json ./composer.lock ./
 RUN composer install --no-dev --prefer-dist --no-progress --no-suggest --no-scripts --optimize-autoload\
     && rm -rf /root/.composer/cache
 
+# CLI
+
+FROM php:8.2-cli-alpine
+
+RUN docker-php-ext-install opcache
+
+RUN mv $PHP_INI_DIR/php.ini-production $PHP_INI_DIR/php.ini
+
+COPY ./docker/common/php/conf.d /usr/local/etc/php/conf.d
+COPY ./docker/production/php/conf.d /usr/local/etc/php/conf.d
+
+WORKDIR /app
+
+COPY --from=composer /app ./
 COPY ./ ./
