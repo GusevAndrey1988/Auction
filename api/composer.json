@@ -29,6 +29,7 @@
         }
     },
     "scripts": {
+        "lint": "phplint",
         "app": "php bin/app.php --ansi"
     }
 }
