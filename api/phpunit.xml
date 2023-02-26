@@ -11,7 +11,7 @@
          failOnWarning="true">
     <testsuites>
         <testsuite name="unit">
-            <directory suffix="Test.php">src/Http/Test</directory>
+            <directory suffix="Test.php">src/*/Test</directory>
         </testsuite>
         <testsuite name="functional">
             <directory suffix="Test.php">tests/Functional</directory>
