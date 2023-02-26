@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Test\Unit\Http;
+namespace App\Http\Test;
 
 use App\Http\JsonResponse;
 use PHPUnit\Framework\Attributes\CoversClass;

@@ -1,5 +1,9 @@
 FROM php:8.2-cli
 
+RUN apt update\
+    && apt install -y git\
+    && apt install -y unzip
+
 RUN pecl install xdebug\
     && docker-php-ext-enable xdebug
 
