@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Auth\Test\Unit\Entity\User;
+namespace App\Auth\Test\Unit\Entity\User\Token;
 
 use App\Auth\Entity\User\Token;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -14,7 +14,7 @@ use Ramsey\Uuid\Uuid;
  * @psalm-suppress UnusedClass
  */
 #[CoversClass(Token::class)]
-class TokenTest extends TestCase
+class CreateTest extends TestCase
 {
     #[Test]
     public function success(): void
