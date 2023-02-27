@@ -2,41 +2,40 @@
 
 declare(strict_types=1);
 
-namespace App\Auth\Test\Unit\Entity\User\User\JoinByEmail;
+namespace App\Auth\Test\Unit\Entity\User\User;
 
 use App\Auth\Entity\User\Email;
 use App\Auth\Entity\User\Id;
-use App\Auth\Entity\User\Token;
+use App\Auth\Entity\User\NetworkIdentity;
 use App\Auth\Entity\User\User;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
-use Ramsey\Uuid\Uuid;
 
 /**
  * @psalm-suppress UnusedClass
  */
 #[CoversClass(User::class)]
-class RequestTest extends TestCase
+class JoinByNetworkTest extends TestCase
 {
     #[Test]
     public function success(): void
     {
-        $user = User::requestJoinByEmail(
+        $user = User::joinByNetwork(
             $id = Id::generate(),
             $date = new \DateTimeImmutable(),
-            $email = new Email('mail@example.com'),
-            $hash = 'hash',
-            $token = new Token(Uuid::uuid4()->toString(), new \DateTimeImmutable())
+            $email = new Email('email@app.test'),
+            $network = new NetworkIdentity('vk', '0000001')
         );
 
         self::assertEquals($id, $user->getId());
         self::assertEquals($date, $user->getDate());
         self::assertEquals($email, $user->getEmail());
-        self::assertEquals($hash, $user->getPasswordHash());
-        self::assertEquals($token, $user->getJoinConfirmToken());
 
-        self::assertTrue($user->isWait());
-        self::assertFalse($user->isActive());
+        self::assertFalse($user->isWait());
+        self::assertTrue($user->isActive());
+
+        self::assertCount(1, $networks = $user->getNetworks());
+        self::assertEquals($network, $networks[0] ?? null);
     }
 }
