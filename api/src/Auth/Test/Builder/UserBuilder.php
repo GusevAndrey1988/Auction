@@ -44,7 +44,7 @@ class UserBuilder
 
     public function build(): User
     {
-        $user = User::requestJoinByEmail( 
+        $user = User::requestJoinByEmail(
             $this->id,
             $this->date,
             $this->email,

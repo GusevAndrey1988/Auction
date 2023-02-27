@@ -59,7 +59,7 @@ class User
     /**
      * @return array<int, NetworkIdentity>
      */
-    public function getNetworks(): array 
+    public function getNetworks(): array
     {
         /** @var array<int, NetworkIdentity> */
         return $this->networks->getArrayCopy();

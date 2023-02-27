@@ -10,7 +10,7 @@ class NetworkIdentity
 {
     private string $network;
     private string $identity;
-    
+
     public function __construct(string $network, string $identity)
     {
         Assert::notEmpty($network);
@@ -22,7 +22,7 @@ class NetworkIdentity
 
     public function isEqualTo(self $network): bool
     {
-        return 
+        return
             $this->getNetwork() === $network->getNetwork()
             && $this->getIdentity() === $network->getIdentity();
     }

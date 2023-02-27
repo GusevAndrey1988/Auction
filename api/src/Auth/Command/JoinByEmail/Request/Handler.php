@@ -35,7 +35,7 @@ class Handler
         $now = new \DateTimeImmutable();
         $token = $this->tokenizer->generate($now);
 
-        $user = new User(
+        $user = User::requestJoinByEmail(
             Id::generate(),
             $now,
             $email,

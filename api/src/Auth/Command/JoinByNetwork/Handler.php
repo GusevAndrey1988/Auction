@@ -40,7 +40,7 @@ class Handler
         );
 
         $this->users->add($user);
-        
+
         $this->flusher->flush();
     }
 }
