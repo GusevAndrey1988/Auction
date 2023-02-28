@@ -15,4 +15,9 @@ interface UserRepository
      * @throws \DomainException
      */
     public function get(Id $userId): User;
+
+    /**
+     * @throws \DomainException
+     */
+    public function getByEmail(Email $email): User;
 }

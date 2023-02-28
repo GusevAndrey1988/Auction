@@ -10,6 +10,7 @@ class User
 {
     private ?string $passwordHash = null;
     private ?Token $joinConfirmationToken = null;
+    private ?Token $passwordResetToken = null;
     private \ArrayObject $networks;
 
     private function __construct(
@@ -43,6 +44,22 @@ class User
         $user->passwordHash = $passwordHash;
         $user->joinConfirmationToken = $token;
         return $user;
+    }
+
+    public function getPasswordResetToken(): ?Token
+    {
+        return $this->passwordResetToken;
+    }
+
+    public function requestPasswordReset(Token $token, \DateTimeImmutable $date): void
+    {
+        if (!$this->isActive()) {
+            throw new \DomainException('User is not active.');
+        }
+        if ($this->passwordResetToken !== null && !$this->passwordResetToken->isExpiredTo($date)) {
+            throw new \DomainException('Resetting is already requested.');
+        }
+        $this->passwordResetToken = $token;
     }
 
     public function attachNetwork(NetworkIdentity $identity): void
