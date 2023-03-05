@@ -2,8 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Auth\Command\ResetPassword\Reset;
+namespace App\Auth\Command\ChangePassword;
 
+use App\Auth\Entity\User\Id;
 use App\Auth\Entity\User\UserRepository;
 use App\Auth\Services\PasswordHasher;
 use App\Flusher;
@@ -19,14 +20,12 @@ class Handler
 
     public function handle(Command $command): void
     {
-        if (!$user = $this->users->findByPasswordResetToken($command->token)) {
-            throw new \DomainException('Token is not found.');
-        }
+        $user = $this->users->get(new Id($command->id));
 
-        $user->resetPassword(
-            $command->token,
-            new \DateTimeImmutable(),
-            $this->hasher->hash($command->password)
+        $user->changePassword(
+            $command->current,
+            $command->new,
+            $this->hasher
         );
 
         $this->flusher->flush();
