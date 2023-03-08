@@ -44,4 +44,13 @@ class EmailTest extends TestCase
         $this->expectException(\InvalidArgumentException::class);
         new Email('');
     }
+
+    #[Test]
+    public function equal(): void
+    {
+        $email = new Email('email@mail.com');
+
+        self::assertTrue($email->isEqualTo(new Email('email@mail.com')));
+        self::assertFalse($email->isEqualTo(new Email('another@mail.com')));
+    }
 }
