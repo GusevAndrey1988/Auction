@@ -16,11 +16,15 @@ COPY ./composer.json ./composer.lock ./
 RUN composer install --no-dev --prefer-dist --no-progress --no-suggest --no-scripts --optimize-autoload\
     && rm -rf /root/.composer/cache
 
-# CLI
+# FPM
 
 FROM php:8.2-fpm-alpine
 
 RUN docker-php-ext-install opcache
+
+RUN apk add postgresql-dev\
+    && docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql\
+    && docker-php-ext-install pdo_pgsql
 
 RUN mv $PHP_INI_DIR/php.ini-production $PHP_INI_DIR/php.ini
 

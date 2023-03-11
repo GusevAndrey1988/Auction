@@ -22,6 +22,10 @@ FROM php:8.2-cli-alpine
 
 RUN docker-php-ext-install opcache
 
+RUN apk add postgresql-dev\
+    && docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql\
+    && docker-php-ext-install pdo_pgsql
+    
 RUN mv $PHP_INI_DIR/php.ini-production $PHP_INI_DIR/php.ini
 
 COPY ./docker/common/php/conf.d /usr/local/etc/php/conf.d
