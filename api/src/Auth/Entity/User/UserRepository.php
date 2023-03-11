@@ -12,6 +12,7 @@ interface UserRepository
     public function findByPasswordResetToken(string $token): ?User;
     public function findByNewEmailToken(string $token): ?User;
     public function add(User $user): void;
+    public function remove(User $user): void;
 
     /**
      * @throws \DomainException

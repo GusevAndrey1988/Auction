@@ -51,6 +51,13 @@ class User
         return $user;
     }
 
+    public function remove(): void
+    {
+        if (!$this->isWait()) {
+            throw new \DomainException('Unable to remove active user.');
+        }
+    }
+
     public function getRole(): Role
     {
         return $this->role;
