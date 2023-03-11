@@ -28,6 +28,10 @@ services:
     environment:
       - APP_ENV=prod
       - APP_DEBUG=0
+      - DB_HOST=api-postgres
+      - DB_USER=app
+      - DB_PASSWORD=${API_DB_PASSWORD}
+      - DB_NAME=app
     restart: always
 
   api-php-cli:
@@ -35,6 +39,10 @@ services:
     environment:
       - APP_ENV=prod
       - APP_DEBUG=0
+      - DB_HOST=api-postgres
+      - DB_USER=app
+      - DB_PASSWORD=${API_DB_PASSWORD}
+      - DB_NAME=app
 
   api-postrgres:
     image: postgres:15.2-alpine
