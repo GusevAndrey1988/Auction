@@ -14,6 +14,7 @@ class User
     private ?Token $passwordResetToken = null;
     private ?Token $newEmailToken = null;
     private ?Email $newEmail = null;
+    private Role $role;
     private \ArrayObject $networks;
 
     private function __construct(
@@ -22,6 +23,7 @@ class User
         private Email $email,
         private Status $status
     ) {
+        $this->role = Role::user();
         $this->networks = new ArrayObject();
     }
 
@@ -47,6 +49,16 @@ class User
         $user->passwordHash = $passwordHash;
         $user->joinConfirmationToken = $token;
         return $user;
+    }
+
+    public function getRole(): Role
+    {
+        return $this->role;
+    }
+
+    public function changeRole(Role $newRole): void
+    {
+        $this->role = $newRole;
     }
 
     public function getNewEmail(): ?Email
