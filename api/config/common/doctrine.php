@@ -63,18 +63,26 @@ return [
     ],
 
     'emp' => function (Container $container): EntityManagerProvider {
-        return new SingleManagerProvider($container->get(EntityManagerInterface::class));
+        /** @var EntityManagerInterface $entityManager */
+        $entityManager = $container->get(EntityManagerInterface::class);
+        return new SingleManagerProvider($entityManager);
     },
 
     ORMCommand\ValidateSchemaCommand::class => function (Container $container): Command {
-        return new ORMCommand\ValidateSchemaCommand($container->get('emp'));
+        /** @var EntityManagerProvider $entityManagerProvider */
+        $entityManagerProvider = $container->get('emp');
+        return new ORMCommand\ValidateSchemaCommand($entityManagerProvider);
     },
 
     ORMCommand\SchemaTool\DropCommand::class => function (Container $container): Command {
-        return new ORMCommand\SchemaTool\DropCommand($container->get('emp'));
+        /** @var EntityManagerProvider $entityManagerProvider */
+        $entityManagerProvider = $container->get('emp');
+        return new ORMCommand\SchemaTool\DropCommand($entityManagerProvider);
     },
 
     ORMCommand\SchemaTool\CreateCommand::class => function (Container $container): Command {
-        return new ORMCommand\SchemaTool\CreateCommand($container->get('emp'));
+        /** @var EntityManagerProvider $entityManagerProvider */
+        $entityManagerProvider = $container->get('emp');
+        return new ORMCommand\SchemaTool\CreateCommand($entityManagerProvider);
     },
 ];

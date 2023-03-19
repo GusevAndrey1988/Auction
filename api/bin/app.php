@@ -21,9 +21,6 @@ $cli = new Application('Console');
  */
 $commands = $container->get('config')['console']['commands'];
 
-/** @var EntityManagerInterface $entityManager */
-$entityManager = $container->get(EntityManagerInterface::class);
-
 foreach ($commands as $commandName) {
     /** @var Command $command */
     $command = $container->get($commandName);
