@@ -6,10 +6,28 @@ namespace App\Auth\Entity\User;
 
 use App\Auth\Services\PasswordHasher;
 use ArrayObject;
+use Doctrine\ORM\Mapping\Column;
+use Doctrine\ORM\Mapping\Entity;
+use Doctrine\ORM\Mapping\Id as OrmId;
+use Doctrine\ORM\Mapping\Table;
 
+#[Entity()]
+#[Table(name: 'auth_users')]
 class User
 {
+    #[Column(type: 'auth_user_id')]
+    #[OrmId()]
+    private Id $id;
+
+    #[Column(type: 'datetime_immutable')]
+    private \DateTimeImmutable $date;
+
+    private Email $email;
+    private Status $status;
+
+    #[Column(type: 'string', nullable: true)]
     private ?string $passwordHash = null;
+
     private ?Token $joinConfirmationToken = null;
     private ?Token $passwordResetToken = null;
     private ?Token $newEmailToken = null;
@@ -18,11 +36,15 @@ class User
     private \ArrayObject $networks;
 
     private function __construct(
-        private Id $id,
-        private \DateTimeImmutable $date,
-        private Email $email,
-        private Status $status
+        Id $id,
+        \DateTimeImmutable $date,
+        Email $email,
+        Status $status
     ) {
+        $this->id = $id;
+        $this->date = $date;
+        $this->email = $email;
+        $this->status = $status;
         $this->role = Role::user();
         $this->networks = new ArrayObject();
     }
