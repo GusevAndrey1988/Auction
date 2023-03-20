@@ -31,10 +31,10 @@ class User
         Id $id,
         \DateTimeImmutable $date,
         Email $email,
-        NetworkIdentity $identity
+        Network $network
     ): self {
         $user = new User($id, $date, $email, Status::active());
-        $user->networks->append($identity);
+        $user->networks->append($network);
         return $user;
     }
 
@@ -142,23 +142,23 @@ class User
         $this->passwordResetToken = $token;
     }
 
-    public function attachNetwork(NetworkIdentity $identity): void
+    public function attachNetwork(Network $network): void
     {
-        /** @var NetworkIdentity $existing */
+        /** @var Network $existing */
         foreach ($this->networks as $existing) {
-            if ($existing->isEqualTo($identity)) {
+            if ($existing->isEqualTo($network)) {
                 throw new \DomainException('Network is already attached.');
             }
         }
-        $this->networks->append($identity);
+        $this->networks->append($network);
     }
 
     /**
-     * @return array<int, NetworkIdentity>
+     * @return array<int, Network>
      */
     public function getNetworks(): array
     {
-        /** @var array<int, NetworkIdentity> */
+        /** @var array<int, Network> */
         return $this->networks->getArrayCopy();
     }
 
