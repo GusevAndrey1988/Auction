@@ -4,12 +4,24 @@ declare(strict_types=1);
 
 namespace App\Auth\Entity\User;
 
+use Doctrine\ORM\Mapping\Column;
+use Doctrine\ORM\Mapping\Embeddable;
 use Webmozart\Assert\Assert;
 
+#[Embeddable()]
 class Token
 {
-    private string $value = '';
-    private \DateTimeImmutable $expires;
+    /**
+     * @var string
+     */
+    #[Column(type: 'string', nullable: true)]
+    private $value;
+
+    /**
+     * @var \DateTimeImmutable
+     */
+    #[Column(type: 'datetime_immutable', nullable: true)]
+    private $expires;
 
     public function __construct(string $value, \DateTimeImmutable $expires)
     {
@@ -47,5 +59,10 @@ class Token
     public function getExpires(): \DateTimeImmutable
     {
         return $this->expires;
+    }
+
+    public function isEmpty(): bool
+    {
+        return empty($this->value);
     }
 }

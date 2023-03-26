@@ -70,6 +70,9 @@ return [
             ],
             'types' => [
                 \App\Auth\Entity\User\IdType::NAME => \App\Auth\Entity\User\IdType::class,
+                \App\Auth\Entity\User\EmailType::NAME => \App\Auth\Entity\User\EmailType::class,
+                \App\Auth\Entity\User\RoleType::NAME => \App\Auth\Entity\User\RoleType::class,
+                \App\Auth\Entity\User\StatusType::NAME => \App\Auth\Entity\User\StatusType::class,
             ],
         ],
     ],
