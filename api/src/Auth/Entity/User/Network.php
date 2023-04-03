@@ -12,7 +12,7 @@ use Webmozart\Assert\Assert;
 class Network
 {
     #[Column(type: 'string')]
-    private string $network;
+    private string $name;
 
     #[Column(type: 'string')]
     private string $identity;
@@ -20,7 +20,7 @@ class Network
     public function __construct(string $name, string $identity)
     {
         Assert::notEmpty($name);
-        $this->network = mb_strtolower($name);
+        $this->name = mb_strtolower($name);
 
         Assert::notEmpty($identity);
         $this->identity = mb_strtolower($identity);
@@ -29,13 +29,13 @@ class Network
     public function isEqualTo(self $network): bool
     {
         return
-            $this->getNetwork() === $network->getNetwork()
+            $this->getName() === $network->getName()
             && $this->getIdentity() === $network->getIdentity();
     }
 
-    public function getNetwork(): string
+    public function getName(): string
     {
-        return $this->network;
+        return $this->name;
     }
 
     public function getIdentity(): string
