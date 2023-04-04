@@ -1,4 +1,4 @@
-version: '3'
+version: "3"
 services:
   gateway:
     build:
@@ -12,7 +12,7 @@ services:
       - api
 
   frontend:
-    build: 
+    build:
       context: frontend/docker
       dockerfile: development/nginx/Dockerfile
     volumes:
@@ -28,7 +28,7 @@ services:
       - api-php-fpm
 
   api-php-fpm:
-    build: 
+    build:
       context: api/docker
       dockerfile: development/php-fpm/Dockerfile
     environment:
@@ -48,7 +48,7 @@ services:
     environment:
       - APP_ENV=dev
       - APP_DEBUG=1
-      - DB_HOST=api-postgres
+      - DB_HOST=api-postrgres
       - DB_USER=app
       - DB_PASSWORD=secret
       - DB_NAME=app
