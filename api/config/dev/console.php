@@ -9,7 +9,6 @@ return [
         'console' => [
             'commands' => [
                 ORMCommand\SchemaTool\DropCommand::class,
-                ORMCommand\SchemaTool\CreateCommand::class,
             ],
         ],
     ],
