@@ -3,18 +3,25 @@
 declare(strict_types=1);
 
 use DI\Container;
-use Doctrine\DBAL\DriverManager;
+use Doctrine\ORM\ORMSetup;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityManager;
+use Doctrine\DBAL\DriverManager;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\Mapping\UnderscoreNamingStrategy;
-use Doctrine\ORM\ORMSetup;
+use Doctrine\Migrations\DependencyFactory;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
-use Symfony\Component\Cache\Adapter\FilesystemAdapter;
+use Doctrine\ORM\Mapping\UnderscoreNamingStrategy;
+use Doctrine\Migrations\Configuration\Configuration;
+use Doctrine\Migrations\Tools\Console\Command as dmc;
 use Doctrine\ORM\Tools\Console\Command as ORMCommand;
 use Doctrine\ORM\Tools\Console\EntityManagerProvider;
+use Symfony\Component\Cache\Adapter\FilesystemAdapter;
+use Doctrine\Migrations\Configuration\Connection\ExistingConnection;
+use Doctrine\Migrations\Configuration\EntityManager\ExistingEntityManager;
+use Doctrine\Migrations\Configuration\Migration\ExistingConfiguration;
+use Doctrine\Migrations\Metadata\Storage\TableMetadataStorageConfiguration;
 use Doctrine\ORM\Tools\Console\EntityManagerProvider\SingleManagerProvider;
-use Symfony\Component\Console\Command\Command;
 
 return [
     EntityManagerInterface::class => function (Container $container): EntityManagerInterface {
@@ -81,6 +88,72 @@ return [
         /** @var EntityManagerInterface $entityManager */
         $entityManager = $container->get(EntityManagerInterface::class);
         return new SingleManagerProvider($entityManager);
+    },
+
+    'df' => function (Container $container): DependencyFactory {
+        /** @var EntityManagerInterface $entityManager */
+        $entityManager = $container->get(EntityManagerInterface::class);
+
+        $connection = $entityManager->getConnection();
+
+        $configuration = new Configuration($connection);
+        $configuration->addMigrationsDirectory('App\Data\Migration', __DIR__ . '/../../src/Data/Migration');
+        $configuration->setAllOrNothing(true);
+        $storageConfiguration = new TableMetadataStorageConfiguration();
+        $storageConfiguration->setTableName('migrations');
+        $configuration->setMetadataStorageConfiguration($storageConfiguration);
+
+        // return DependencyFactory::fromConnection(
+        //     new ExistingConfiguration($configuration),
+        //     new ExistingConnection($connection)
+        // );
+
+        return DependencyFactory::fromEntityManager(
+            new ExistingConfiguration($configuration),
+            new ExistingEntityManager($entityManager)
+        );
+    },
+
+    dmc\ExecuteCommand::class => function (Container $container): Command {
+        /** @var DependencyFactory $dependencyFactory */
+        $dependencyFactory = $container->get('df');
+        return new dmc\ExecuteCommand($dependencyFactory);
+    },
+
+    dmc\MigrateCommand::class => function (Container $container): Command {
+        /** @var DependencyFactory $dependencyFactory */
+        $dependencyFactory = $container->get('df');
+        return new dmc\MigrateCommand($dependencyFactory);
+    },
+
+    dmc\LatestCommand::class => function (Container $container): Command {
+        /** @var DependencyFactory $dependencyFactory */
+        $dependencyFactory = $container->get('df');
+        return new dmc\LatestCommand($dependencyFactory);
+    },
+
+    dmc\StatusCommand::class => function (Container $container): Command {
+        /** @var DependencyFactory $dependencyFactory */
+        $dependencyFactory = $container->get('df');
+        return new dmc\StatusCommand($dependencyFactory);
+    },
+
+    dmc\UpToDateCommand::class => function (Container $container): Command {
+        /** @var DependencyFactory $dependencyFactory */
+        $dependencyFactory = $container->get('df');
+        return new dmc\UpToDateCommand($dependencyFactory);
+    },
+
+    dmc\DiffCommand::class => function (Container $container): Command {
+        /** @var DependencyFactory $dependencyFactory */
+        $dependencyFactory = $container->get('df');
+        return new dmc\DiffCommand($dependencyFactory);
+    },
+
+    dmc\GenerateCommand::class => function (Container $container): Command {
+        /** @var DependencyFactory $dependencyFactory */
+        $dependencyFactory = $container->get('df');
+        return new dmc\GenerateCommand($dependencyFactory);
     },
 
     ORMCommand\ValidateSchemaCommand::class => function (Container $container): Command {
