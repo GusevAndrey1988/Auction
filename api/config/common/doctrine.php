@@ -17,7 +17,6 @@ use Doctrine\Migrations\Tools\Console\Command as dmc;
 use Doctrine\ORM\Tools\Console\Command as ORMCommand;
 use Doctrine\ORM\Tools\Console\EntityManagerProvider;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
-use Doctrine\Migrations\Configuration\Connection\ExistingConnection;
 use Doctrine\Migrations\Configuration\EntityManager\ExistingEntityManager;
 use Doctrine\Migrations\Configuration\Migration\ExistingConfiguration;
 use Doctrine\Migrations\Metadata\Storage\TableMetadataStorageConfiguration;
