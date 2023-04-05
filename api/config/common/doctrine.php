@@ -3,6 +3,8 @@
 declare(strict_types=1);
 
 use DI\Container;
+use Doctrine\Common\EventManager;
+use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\ORMSetup;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityManager;
@@ -32,7 +34,8 @@ return [
          *     proxy_dir:string,
          *     cache_dir:?string,
          *     types:array<string,class-string<\Doctrine\DBAL\Types\Type>>,
-         *     connection:array
+         *     connection:array,
+         *     subscribers:array<int, string>,
          * } $settings
          */
         $settings = $container->get('config')['doctrine'];
@@ -55,7 +58,15 @@ return [
             }
         }
 
-        return new EntityManager($connection, $config);
+        $eventManager = new EventManager();
+
+        foreach ($settings['subscribers'] as $name) {
+            /** @var EventSubscriber $subscriber */
+            $subscriber = $container->get($name);
+            $eventManager->addEventSubscriber($subscriber);
+        }
+
+        return new EntityManager($connection, $config, $eventManager);
     },
 
     'config' => [
@@ -80,6 +91,7 @@ return [
                 \App\Auth\Entity\User\RoleType::NAME => \App\Auth\Entity\User\RoleType::class,
                 \App\Auth\Entity\User\StatusType::NAME => \App\Auth\Entity\User\StatusType::class,
             ],
+            'subscribers' => [],
         ],
     ],
 
@@ -93,19 +105,13 @@ return [
         /** @var EntityManagerInterface $entityManager */
         $entityManager = $container->get(EntityManagerInterface::class);
 
-        $connection = $entityManager->getConnection();
-
-        $configuration = new Configuration($connection);
+        /** @psalm-suppress TooManyArguments */
+        $configuration = new Configuration($entityManager->getConnection());
         $configuration->addMigrationsDirectory('App\Data\Migration', __DIR__ . '/../../src/Data/Migration');
         $configuration->setAllOrNothing(true);
         $storageConfiguration = new TableMetadataStorageConfiguration();
         $storageConfiguration->setTableName('migrations');
         $configuration->setMetadataStorageConfiguration($storageConfiguration);
-
-        // return DependencyFactory::fromConnection(
-        //     new ExistingConfiguration($configuration),
-        //     new ExistingConnection($connection)
-        // );
 
         return DependencyFactory::fromEntityManager(
             new ExistingConfiguration($configuration),
