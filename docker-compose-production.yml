@@ -44,7 +44,7 @@ services:
       - DB_PASSWORD=${API_DB_PASSWORD}
       - DB_NAME=app
 
-  api-postrgres:
+  api-postgres:
     image: postgres:15.2-alpine
     restart: always
     environment:
