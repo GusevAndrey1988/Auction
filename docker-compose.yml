@@ -39,6 +39,8 @@ services:
       - DB_USER=app
       - DB_PASSWORD=secret
       - DB_NAME=app
+      - MAILER_DSN=smtp://app:pass@mailer:1025
+      - MAILER_FROM_EMAIL=mail@app.test
     volumes:
       - ./api:/app
 
@@ -53,6 +55,8 @@ services:
       - DB_USER=app
       - DB_PASSWORD=secret
       - DB_NAME=app
+      - MAILER_DSN=smtp://app:pass@mailer:1025
+      - MAILER_FROM_EMAIL=mail@app.test
     volumes:
       - ./api:/app
 

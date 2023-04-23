@@ -32,6 +32,8 @@ services:
       - DB_USER=app
       - DB_PASSWORD=${API_DB_PASSWORD}
       - DB_NAME=app
+      - MAILER_DSN=${API_MAILER_DSN}
+      - MAILER_FROM_EMAIL=${API_MAILER_FROM_EMAIL}
     restart: always
 
   api-php-cli:
@@ -43,6 +45,8 @@ services:
       - DB_USER=app
       - DB_PASSWORD=${API_DB_PASSWORD}
       - DB_NAME=app
+      - MAILER_DSN=${API_MAILER_DSN}
+      - MAILER_FROM_EMAIL=${API_MAILER_FROM_EMAIL}
 
   api-postgres:
     image: postgres:15.2-alpine
