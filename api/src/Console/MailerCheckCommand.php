@@ -4,18 +4,22 @@ declare(strict_types=1);
 
 namespace App\Console;
 
-use Psr\Container\ContainerInterface;
+use App\Auth\Entity\User\Email;
+use App\Auth\Entity\User\Token;
+use App\Auth\Services\JoinConfirmationSender;
+use Ramsey\Uuid\Nonstandard\Uuid;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Mime\Email;
 
 class MailerCheckCommand extends Command
 {
-    public function __construct(private ContainerInterface $container)
+    /**
+     * @psalm-suppress PossiblyUnusedMethod
+     */
+    public function __construct(private JoinConfirmationSender $sender)
     {
-        parent::__construct();       
+        parent::__construct();
     }
 
     protected function configure(): void
@@ -28,15 +32,10 @@ class MailerCheckCommand extends Command
     {
         $output->writeln('<comment>Sending</comment>');
 
-        $message = (new Email())
-            ->from('mail@app.test')
-            ->to('user@app.test')
-            ->html('Confirm');
-
-        /** @var MailerInterface */
-        $mailer = $this->container->get(MailerInterface::class);
-
-        $mailer->send($message);
+        $this->sender->send(
+            new Email('user@app.test'),
+            new Token(Uuid::uuid4()->toString(), new \DateTimeImmutable())
+        );
 
         $output->writeln('<info>Done!</info>');
 
